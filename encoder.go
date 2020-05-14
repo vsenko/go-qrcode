@@ -179,11 +179,22 @@ func (d *dataEncoder) encode(data []byte) (*bitset.Bitset, error) {
 	if err != nil {
 		return nil, err
 	}
+	
+	// Check if basic byte encoding would consume less
+	optimizedLength := 0
+	for _, s := range d.optimised {
+		optimizedLength += d.encodedLength(s.dataMode, len(s.data))
+	}
+	basicByteLength := d.encodedLength(dataModeByte, len(d.data))
 
 	// Encode data.
 	encoded := bitset.New()
-	for _, s := range d.optimised {
-		d.encodeDataRaw(s.data, s.dataMode, encoded)
+	if basicByteLength <= optimizedLength {
+		d.encodeDataRaw(d.data, dataModeByte, encoded)
+	} else {
+		for _, s := range d.optimised {
+			d.encodeDataRaw(s.data, s.dataMode, encoded)
+		}
 	}
 
 	return encoded, nil
