@@ -183,9 +183,16 @@ func (d *dataEncoder) encode(data []byte) (*bitset.Bitset, error) {
 	// Check if basic byte encoding would consume less
 	optimizedLength := 0
 	for _, s := range d.optimised {
-		optimizedLength += d.encodedLength(s.dataMode, len(s.data))
+		length, err := d.encodedLength(s.dataMode, len(s.data))
+		if err != nil {
+			return nil, err
+		}
+		optimizedLength += length
 	}
-	basicByteLength := d.encodedLength(dataModeByte, len(d.data))
+	basicByteLength, err := d.encodedLength(dataModeByte, len(d.data))
+	if err != nil {
+		return nil, err
+	}
 
 	// Encode data.
 	encoded := bitset.New()
