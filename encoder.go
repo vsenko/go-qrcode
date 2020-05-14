@@ -196,9 +196,8 @@ func (d *dataEncoder) encode(data []byte) (*bitset.Bitset, error) {
 	}
 	
 	if basicByteLength <= optimizedLength {
-		d.optimised = [1]segment{segment{dataMode: dataModeByte, data: d.data}}
+		d.optimised = []segment{segment{dataMode: dataModeByte, data: d.data}}
 	}
-
 	
 	// Encode data.
 	encoded := bitset.New()
