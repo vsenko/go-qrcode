@@ -180,17 +180,17 @@ func TestOptimiseEncoding(t *testing.T) {
 		{
 			dataEncoderType1To9,
 			[]testModeSegment{
-				{dataModeAlphanumeric, 1},
+				{dataModeAlphanumeric, 100},
 				{dataModeByte, 1},
 				{dataModeNumeric, 1},
 			},
 			[]testModeSegment{
-				{dataModeAlphanumeric, 1},
+				{dataModeAlphanumeric, 100},
 				{dataModeByte, 2},
 			},
 		},
-		// https://www.google.com/123
-		// BBBBBAAABBBABBBBBBABBBANNN
+		// https://www.google.com/123456789012345678901234567890
+		// BBBBBAAABBBABBBBBBABBBANNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 		{
 			dataEncoderType1To9,
 			[]testModeSegment{
@@ -201,11 +201,11 @@ func TestOptimiseEncoding(t *testing.T) {
 				{dataModeByte, 6},
 				{dataModeAlphanumeric, 1},
 				{dataModeAlphanumeric, 4},
-				{dataModeNumeric, 3},
+				{dataModeNumeric, 30},
 			},
 			[]testModeSegment{
 				{dataModeByte, 23},
-				{dataModeNumeric, 3},
+				{dataModeNumeric, 30},
 			},
 		},
 		// HTTPS://WWW.GOOGLE.COM/123
