@@ -189,19 +189,21 @@ func (d *dataEncoder) encode(data []byte) (*bitset.Bitset, error) {
 		}
 		optimizedLength += length
 	}
+	
 	basicByteLength, err := d.encodedLength(dataModeByte, len(d.data))
 	if err != nil {
 		return nil, err
 	}
+	
+	if basicByteLength <= optimizedLength {
+		d.optimised = [1]segment{segment{dataMode: dataModeByte, data: d.data}}
+	}
 
+	
 	// Encode data.
 	encoded := bitset.New()
-	if basicByteLength <= optimizedLength {
-		d.encodeDataRaw(d.data, dataModeByte, encoded)
-	} else {
-		for _, s := range d.optimised {
-			d.encodeDataRaw(s.data, s.dataMode, encoded)
-		}
+	for _, s := range d.optimised {
+		d.encodeDataRaw(s.data, s.dataMode, encoded)
 	}
 
 	return encoded, nil
